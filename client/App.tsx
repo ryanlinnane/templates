@@ -1,8 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import './App.css'
 import React from 'react';
+import './App.css'
+
+const WORKSPACE_URL = "https://6000-idx-chart-1732650981523.cluster-f4iwdviaqvc2ct6pgytzw4xqy4.cloudworkstations.dev";
+
+async function get(url) {
+  const response = await fetch(url, {
+    credentials: 'include',
+  });
+  const result = (await response.text());
+  console.log(result)
+  return result;
+}
+
 
 const stockData = [
   { date: "2023-11-01", price: 162.00 },
@@ -97,10 +109,19 @@ const StockChart = () => {
 
 function App() {
   const [count, setCount] = useState(0)
+  const [data, setData] = useState('')
+
+
+  useEffect(() => {
+    get(WORKSPACE_URL + '/api').then((res) => {
+      setData(res)
+    })
+  }, [])
   return (
     <ul>
       <li>hello</li>
       <li>this is a test</li>
+      {data !== '' && <li>{data}</li>}
       {/* <StockChart /> */}
     </ul>
   )
