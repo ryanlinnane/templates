@@ -25,6 +25,10 @@
       # To run something each time the workspace is (re)started, use the `onStart` hook
       onStart = {
         npm-watch-be = "npm --prefix server run dev";
+        setup-aliases = ''
+          echo -e "alias ga='git add'" > /home/user/.bash_aliases
+          echo -e "alias gcm='git commit --message'" >> /home/user/.bash_aliases
+        '';
       };
     };
     # Enable previews and customize configuration
