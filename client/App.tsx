@@ -28,6 +28,7 @@ function App() {
   }, [])
   return (
     <ul>
+      <li>live?</li>
       <li>hello</li>
       <li>this is a test</li>
       {data !== '' && <li>{data}</li>}
