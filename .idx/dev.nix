@@ -28,6 +28,7 @@
         setup-aliases = ''
           echo -e "alias ga='git add'" > /home/user/.bash_aliases
           echo -e "alias gcm='git commit --message'" >> /home/user/.bash_aliases
+          echo -e "alias gs='git status'" >> /home/user/.bash_aliases
         '';
       };
     };
