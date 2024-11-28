@@ -4,6 +4,10 @@ nixpacks:
   version: "0.1"
   channel: "stable-24.05" # Specify the Nix channel version
 
+# Explicitly set the provider to Node.js
+providers:
+  - node
+  
 dependencies:
   # Specify packages from nixpkgs
   nix:
