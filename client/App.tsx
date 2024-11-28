@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import './App.css'
+import React from 'react';
 
 const stockData = [
   { date: "2023-11-01", price: 162.00 },
