@@ -7,7 +7,7 @@ nixpacks:
 # Explicitly set the provider to Node.js
 providers:
   - node
-  
+
 dependencies:
   # Specify packages from nixpkgs
   nix:
@@ -17,7 +17,9 @@ dependencies:
 commands:
   # Commands to run during the build phase
   build: |
+    npm --prefix ./client install
     npm --prefix ./client run build
+    npm --prefix ./server install
     echo "Build complete."
 
   # Commands to run when the app starts
