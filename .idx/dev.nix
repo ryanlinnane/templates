@@ -10,7 +10,9 @@
     pkgs.nixpacks
   ];
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+    VITE_REACT_APP_IDX_ENV = true;
+  };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
