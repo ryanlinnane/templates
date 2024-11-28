@@ -5,7 +5,7 @@ const app = express();
 app.use(cors());
 
 app.get("/api", (req, res) => {
-  res.send("Hello ");
+  res.send("Hello");
 });
 
 app.listen(6000, () => {
