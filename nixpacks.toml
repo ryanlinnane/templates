@@ -7,16 +7,12 @@ channel = "stable-24.05"
 [dependencies.nix]
 nix = ["nodejs_20", "silver-searcher"]
 
-[commands]
-build = """
-npm install --prefix ./client
-npm run build --prefix ./client
-npm install --prefix ./server
-echo "Build complete."
-"""
-start = """
-npm run start --prefix ./server
-"""
+
+[phases.build]
+cmds = ["npm install --prefix ./client", "npm run build --prefix ./client", "npm install --prefix ./server"]
+
+[start]
+cmd = "npm run start --prefix ./server"
 
 [environment]
 NODE_ENV = "production"
