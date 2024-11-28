@@ -37,7 +37,8 @@
       enable = true;
       previews = {
         web = {
-          command = ["npm" "--prefix" "./client" "run" "dev" "--" "--port" "$PORT" "--host" "0.0.0.0"];
+          command = ["sh" "-c" "sleep 5 && npm --prefix ./client run dev -- --port $PORT --host 0.0.0.0"];
+          # command = ["npm" "--prefix" "./client" "run" "dev" "--" "--port" "$PORT" "--host" "0.0.0.0"];
           manager = "web";
         };
       };
