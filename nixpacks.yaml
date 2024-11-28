@@ -30,28 +30,3 @@ environment:
   # Set environment variables
   NODE_ENV: "production"
   HOST: "0.0.0.0"
-
-extensions:
-  # VS Code extensions (replace with your desired extensions)
-  - vscodevim.vim
-
-workspace:
-  # Actions for workspace lifecycle
-  onCreate:
-    - echo "Workspace created."
-    - echo -e "alias ga='git add'" >> ~/.bash_aliases
-    - echo -e "alias gcm='git commit --message'" >> ~/.bash_aliases
-    - echo -e "alias gs='git status'" >> ~/.bash_aliases
-
-  onStart:
-    - npm --prefix ./server run dev
-    - echo "Workspace restarted. Aliases set."
-
-previews:
-  # Configure previews for the workspace
-  enable: true
-  web:
-    command: |
-      sleep 5
-      npm --prefix ./client run dev -- --port $PORT --host 0.0.0.0
-    manager: "web"
