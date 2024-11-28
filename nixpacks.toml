@@ -14,7 +14,9 @@ npm run build --prefix ./client
 npm install --prefix ./server
 echo "Build complete."
 """
-start = "npm run start --prefix ./server"
+start = """
+npm run start --prefix ./server
+"""
 
 [environment]
 NODE_ENV = "production"
