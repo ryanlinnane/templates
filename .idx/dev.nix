@@ -7,6 +7,7 @@
   packages = [
     pkgs.nodejs_20
     pkgs.silver-searcher
+    pkgs.nixpacks
   ];
   # Sets environment variables in the workspace
   env = {};
