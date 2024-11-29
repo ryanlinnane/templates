@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 
 app.get("/api", (req, res) => {
-  res.send("Hello");
+  res.send("did it work?");
 });
 
 // Serve static files from the `public` directory

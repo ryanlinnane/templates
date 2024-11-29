@@ -28,6 +28,7 @@ function App() {
   }, [])
   return (
     <ul>
+      <li>cheers man</li>
       <li>live?</li>
       <li>hello</li>
       <li>this is a test</li>
