@@ -6,10 +6,13 @@ import type { Request } from 'express';
 import dotenv from 'dotenv';
 
 dotenv.config();
-console.log(process.env.STRIPE_API_KEY!)
+
 const stripe = new Stripe(process.env.STRIPE_API_KEY!);
+
 const app = express();
 app.use(cors());
+
+const workstationAccessToken = process.env.WORKSTATION_ACCESS_TOKEN || '';
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -38,29 +41,41 @@ app.post('/checkout', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: '{{PRICE_ID}}',
+        // Define the product and price details here
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Stubborn Attachments',
+          },
+          unit_amount: 2000, // Amount in cents (e.g., $20.00)
+        },
         quantity: 1,
       },
     ],
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${req.get('host')}/success?session_id={CHECKOUT_SESSION_ID}",`,
-    cancel_url: `${req.get('host')}/cancel`,
+    success_url: `${req.protocol}://${process.env.WORKSTATION || req.get('host')}/success?_workstationAccessToken=${process.env.WORKSTATION_ACCESS_TOKEN || ''}&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${req.protocol}://${process.env.WORKSTATION || req.get('host')}/cancel?_workstationAccessToken=${process.env.WORKSTATION_ACCESS_TOKEN || ''}`,
     metadata: {
+      // TODO(ryan) pass this from a logged in user.
       user_email: 'ryan@gmail.com',
-    }
+    },
+    customer_creation: 'always',
   });
+  console.log(session.url)
   res.redirect(303, session.url!);
 });
 
 app.get('/success', async (req: Request<{}, any, any, { session_id: string }>, res) => {
   const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
   const customer = await stripe.customers.retrieve(session.customer?.toString()!) as Stripe.Customer;
-  const userEmail = customer.metadata.user_email;
-  console.log(userEmail);
-
-  res.send(`<html><body><h1>Thanks for your order, ${customer.name}!</h1></body></html>`);
+  res.render('success', {
+    status: session.status,
+    orderId: customer.id,
+    name: customer.name,
+    orderEmail: customer.email,
+    userEmail: session.metadata?.user_email,
+  })
 });
 
 // Fallback to index.html for SPA routes (if applicable)
