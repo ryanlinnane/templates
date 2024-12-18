@@ -62,20 +62,47 @@ app.post('/checkout', async (req, res) => {
     },
     customer_creation: 'always',
   });
-  console.log(session.url)
   res.redirect(303, session.url!);
 });
 
 app.get('/success', async (req: Request<{}, any, any, { session_id: string }>, res) => {
-  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+  const session = await stripe.checkout.sessions.retrieve(req.query.session_id, { expand: ['payment_intent'] });
   const customer = await stripe.customers.retrieve(session.customer?.toString()!) as Stripe.Customer;
-  res.render('success', {
+
+  // TODO create the user here.
+  const paymentIntent = session.payment_intent as Stripe.PaymentIntent;
+  console.log(paymentIntent)
+  if (paymentIntent.status === 'succeeded') {
+    // Create or update DB.
+    res.redirect('/app/');
+    return;
+  }
+  res.render('pending', {
     status: session.status,
     orderId: customer.id,
     name: customer.name,
     orderEmail: customer.email,
     userEmail: session.metadata?.user_email,
-  })
+  });
+});
+
+app.get('/payment-status', async (req: any, res: any) => {
+  const sessionId = req.query.session_id;
+
+  if (!sessionId) {
+    return res.status(400).json({ error: 'Session ID is required' });
+  }
+
+  try {
+    // Retrieve the Checkout Session from Stripe
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // Return the payment status
+    res.json({ payment_status: session.payment_status });
+  } catch (error) {
+    console.error('Error retrieving session:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
 });
 
 // Fallback to index.html for SPA routes (if applicable)
